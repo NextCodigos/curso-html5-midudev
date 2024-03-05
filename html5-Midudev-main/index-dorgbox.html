@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #left-panel, #right-panel, #main {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px;
+            overflow: auto;
+            min-height: 200px;
+        }
+
+        .draggable {
+            cursor: grab;
+            user-select: none;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="left-panel">
+        <div class="draggable" draggable="true" ondragstart="drag(event)">Etiqueta 1</div>
+        <div class="draggable" draggable="true" ondragstart="drag(event)">Etiqueta 2</div>
+    </div>
+    <main id="main" ondragover="allowDrop(event)" ondrop="drop(event)">
+        <!-- Área para arrastrar y soltar -->
+    </main>
+    <div id="right-panel">
+        <div class="draggable" draggable="true" ondragstart="drag(event)">Etiqueta 3</div>
+        <div class="draggable" draggable="true" ondragstart="drag(event)">Etiqueta 4</div>
+    </div>
+
+    <script>
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text/plain", event.target.textContent);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text/plain");
+            const draggableElement = document.createElement("div");
+            draggableElement.textContent = data;
+            draggableElement.className = "draggable";
+            draggableElement.draggable = true;
+            draggableElement.ondragstart = drag;
+            event.target.appendChild(draggableElement);
+        }
+    </script>
+</body>
+</html>

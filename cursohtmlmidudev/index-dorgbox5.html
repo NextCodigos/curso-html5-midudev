@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrastrar y Soltar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            justify-content: space-between;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        #left-panel, #right-panel {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px;
+            background-color: #fff;
+        }
+
+        #main {
+            flex: 2;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px;
+            background-color: #fff;
+        }
+
+        .draggable {
+            cursor: grab;
+            user-select: none;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Arrastrar y Soltar</h1>
+    </header>
+    <main>
+        <div id="left-panel">
+            <div class="draggable" draggable="true" ondragstart="drag(event)">Etiqueta Header</div>
+            <div class="draggable" draggable="true" ondragstart="drag(event)">Etiqueta Main</div>
+            <div class="draggable" draggable="true" ondragstart="drag(event)">Etiqueta Aside</div>
+            <div class="draggable" draggable="true" ondragstart="drag(event)">Etiqueta Footer</div>
+        </div>
+        <div id="main" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <!-- Área para arrastrar y soltar -->
+        </div>
+        <div id="right-panel">
+            <div class="draggable" draggable="true" ondragstart="drag(event)">El Lenguaje de Marcado de Hipertexto (HTML) es el código que se utiliza para estructurar y desplegar una página web y sus contenidos...</div>
+        </div>
+    </main>
+    <footer>
+        <p>Explora más en nuestro <a href="https://www.mozilla.org/es-AR/about/manifesto/" target="_blank">Manifesto Mozilla</a></p>
+    </footer>
+
+    <script>
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text/plain", event.target.textContent);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text/plain");
+            const draggableElement = document.createElement("div");
+            draggableElement.textContent = data;
+            draggableElement.className = "draggable";
+            draggableElement.draggable = true;
+            draggableElement.ondragstart = drag;
+            event.target.appendChild(draggableElement);
+        }
+    </script>
+</body>
+</html>

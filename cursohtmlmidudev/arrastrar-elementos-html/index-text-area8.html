@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Arrastrar Elementos</title>
+  <style>
+    /* Estilos CSS */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+    }
+
+    header, footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    aside {
+      background-color: #f0f0f0;
+      min-width: 150px;
+    }
+
+    .dropArea {
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 2px dashed #333;
+    }
+
+    .dropArea h2 {
+      text-align: center;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <section id="areaSeccion" class="draggable dropArea" draggable="true">
+      <h2>Área de Sección</h2>
+      <p>&lt;p&gt; Etiqueta usada para escribir párrafos de texto.</p>
+    </section>
+    <section id="areaSeccion2" class="draggable dropArea" draggable="true">
+      <hr>&lt;hr&gt; Etiqueta utilizada para «romper» entre dos secciones de una web.
+    </section>
+    <section id="areaSeccion3" class="draggable dropArea" draggable="true">
+      <pre>&lt;pre&gt; </pre> Usada para pegar texto manteniendo el pre formato propio del texto.
+    </section>
+    <section id="areaSeccion4" class="draggable dropArea" draggable="true">
+      <blockquote>&lt;blockquote&gt; </blockquote> Se usan para indicar que el contenido es texto citado.
+    </section>
+    <!-- Puedes seguir agregando más secciones con diferentes etiquetas aquí -->
+    <section id="areaSeccion5" class="draggable dropArea" draggable="true">
+      <ol>&lt;ol&gt; </ol> Etiquetas para crear una lista ordenada
+    </section>
+    <section id="areaSeccion6" class="draggable dropArea" draggable="true">
+      <ul>&lt;ul&gt; </ul> Etiquetas para crear una lista des-ordenada
+    </section>
+    <section id="areaSeccion7" class="draggable dropArea" draggable="true">
+      <li>&lt;li&gt; </li> Etiquetas que recogen el contenido de un elemento de una lista, sea ordenada o no.
+    </section>
+    <section id="areaSeccion8" class="draggable dropArea" draggable="true">
+      <dl>&lt;dl&gt; </dl> Usada para crear una lista de definiciones.
+    </section>
+    <section id="areaSeccion9" class="draggable dropArea" draggable="true">
+      <dt>&lt;dt&gt; </dt> Representa un término definido por la siguiente etiqueta <dd>
+    </section>
+    <section id="areaSeccion10" class="draggable dropArea" draggable="true">
+      <dd>&lt;dd&gt; </dd> Se usa para definir los términos listados antes que él.
+    </section>
+    <section id="areaSeccion11" class="draggable dropArea" draggable="true">
+      <figure>&lt;figure&gt; </figure> Indica una figura ilustrada como parte del documento HTML5.
+    </section>
+    <section id="areaSeccion12" class="draggable dropArea" draggable="true">
+      <figcaption>&lt;figcaption&gt; </figcaption> Utilizada para definir la leyenda de una figura.
+    </section>
+    <section id="areaSeccion13" class="draggable dropArea" draggable="true">
+      <div>&lt;div&gt; </div> Etiqueta común utilizada para crear un contenedor genérico.
+    </section>
+  </aside>
+
+  <main>
+    <div class="dropArea" id="dropAreaHeader" title="Encabezado">
+      <h2>Header</h2>
+    </div>
+    <div class="dropArea" id="dropAreaLeft">
+      <h2>Área Izquierda</h2>
+    </div>
+    <div class="dropArea" id="dropAreaCenter" title="Área Central">
+      <h2>Área Central</h2>
+    </div>
+    <div class="dropArea" id="dropAreaRight" style="background-color: lightblue;" title="Área Derecha">
+      <h2>Área Derecha</h2>
+    </div>
+    <div class="dropArea" id="dropAreaFooter">
+      <h2>Footer</h2>
+    </div>
+  </main>
+
+  <script>
+    // Script JS para habilitar arrastrar y soltar
+    document.addEventListener('DOMContentLoaded', function () {
+      const draggableElements = document.querySelectorAll('.draggable');
+      const dropAreas = document.querySelectorAll('.dropArea');
+
+      draggableElements.forEach(element => {
+        element.addEventListener('dragstart', dragStart);
+      });
+
+      dropAreas.forEach(area => {
+        area.addEventListener('dragover', dragOver);
+        area.addEventListener('drop', drop);
+      });
+
+      function dragStart(event) {
+        event.dataTransfer.setData('text/plain', event.target.outerHTML);
+      }
+
+      function dragOver(event) {
+        event.preventDefault();
+      }
+
+      function drop(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain');
+        const newElement = document.createElement('div');
+        newElement.innerHTML = data;
+        const element = newElement.firstChild;
+
+        if (element.classList.contains('draggable')) {
+          event.target.appendChild(element);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

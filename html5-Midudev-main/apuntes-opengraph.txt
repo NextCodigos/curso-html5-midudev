@@ -1,0 +1,263 @@
+
+El protocolo Open Graph
+Open Graph protocol logo
+Introducción
+
+El protocolo Open Graph permite que cualquier página web se convierta en un rico objeto en un gráfico social. Por ejemplo, esto se utiliza en Facebook para permitir cualquier página web para tener la misma funcionalidad que cualquier otro objeto en Facebook.
+
+Mientras que existen muchas tecnologías y esquemas diferentes que podrían combinarse juntos, no hay una sola tecnología que proporcione suficiente información a Representan ricamente cualquier página web dentro del gráfico social. El protocolo Open Graph se basa en estas tecnologías existentes y da a los desarrolladores una cosa a la aplicación. La simplicidad de desarrollador es un objetivo clave del protocolo Open Graph que ha informado a muchos de las decisiones de diseño técnico.
+Datos básicos
+
+Para convertir tus páginas web en objetos gráficos, necesitas añadir metadatos básicos a tu página. Basamos la versión inicial del protocolo en RDFa lo que significa que te irás aloje adicionalidad <meta>etiquetas en el <head>de su página web. Los cuatro necesarios las propiedades para cada página son:
+
+    og:title- El título de su objeto, ya que debe aparecer dentro del gráfico, Por ejemplo, "La Roca".
+    og:type- El tipo de tu objeto, por ejemplo, "video.movie". Dependiendo de el tipo que especifique, otras propiedades también pueden ser necesarias.
+    og:image- Una URL de imagen que debería representar su objeto dentro de la Gráfico.
+    og:url- La URL canónica de tu objeto que se utilizará como su Identificación permanente en el gráfico, por ejemplo, "https://www.imdb.com/title/tt0117500/".
+
+Como ejemplo, lo siguiente es el marcador de protocolo Open Graph para The Rock on IMDB:
+
+<html prefix="og: https://ogp.me/ns#">
+<head>
+<title>The Rock (1996)</title>
+<meta property="og:title" content="The Rock" />
+<meta property="og:type" content="video.movie" />
+<meta property="og:url" content="https://www.imdb.com/title/tt0117500/" />
+<meta property="og:image" content="https://ia.media-imdb.com/images/rock.jpg" />
+...
+</head>
+...
+</html>
+
+Metatos opcionales
+
+Las siguientes propiedades son opcionales para cualquier objeto y generalmente son se recomienda:
+
+    og:audio- Una URL a un archivo de audio para acompañar este objeto.
+    og:description- Una descripción de una a dos frases de su objeto.
+    og:determiner- La palabra que aparece ante el título de este objeto en una frase. Un enum de (a, an, el, "," auto). Si autoes Elegiste, el consumidor de tus datos debe elegir entre "a" o "an". El defecto es "" (blank).
+    og:locale- Las ubicas estas etiquetas están marcadas. Del formato language_TERRITORY. El incumplimiento es en_US.
+    og:locale:alternate- Una variedad de otros lugares esta página es disponible en.
+    og:site_name- Si su objeto es parte de un sitio web más grande, el nombre que debe mostrarse para el sitio general. por ejemplo, "IMDb".
+    og:video- Una URL de un archivo de vídeo que complementa este objeto.
+
+Por ejemplo (romperá la línea únicamente con fines de visualización):
+
+<meta property="og:audio" content="https://example.com/bond/theme.mp3" />
+<meta property="og:description" 
+  content="Sean Connery found fame and fortune as the
+           suave, sophisticated British agent, James Bond." />
+<meta property="og:determiner" content="the" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:locale:alternate" content="fr_FR" />
+<meta property="og:locale:alternate" content="es_ES" />
+<meta property="og:site_name" content="IMDb" />
+<meta property="og:video" content="https://example.com/bond/trailer.swf" />
+
+El esquema RDF (en Turtua) se puede encontrar en ogp.me/ns.
+Propiedades estructuradas
+
+Algunas propiedades pueden tener metadatos adicionales conectados a ellos. Estos se especifican de la misma manera que otros metadatos con propertyy content, pero el propertytendrá extra. :.
+
+El og:imagepropiedad tiene algunas propiedades estructuradas opcionales:
+
+    og:image:url- Idéntico a og:image.
+    og:image:secure_url- Una url alternativa para usar si la página web requiere HTTPS.
+    og:image:type- Un tipo de MIME para esta imagen.
+    og:image:width- El número de píxeles de ancho.
+    og:image:height- El número de píxeles de altura.
+    og:image:alt- Una descripción de lo que hay en la imagen (no un subtítulo). Si la página especifica una imagen og:imágena debe especificar og:image:alt.
+
+Un ejemplo de imagen completo:
+
+<meta property="og:image" content="https://example.com/ogp.jpg" />
+<meta property="og:image:secure_url" content="https://secure.example.com/ogp.jpg" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="400" />
+<meta property="og:image:height" content="300" />
+<meta property="og:image:alt" content="A shiny red apple with a bite taken out" />
+
+El og:videotag tiene las etiquetas idénticas como og:image. He aquí un ejemplo:
+
+<meta property="og:video" content="https://example.com/movie.swf" />
+<meta property="og:video:secure_url" content="https://secure.example.com/movie.swf" />
+<meta property="og:video:type" content="application/x-shockwave-flash" />
+<meta property="og:video:width" content="400" />
+<meta property="og:video:height" content="300" />
+
+El og:audiotag sólo tiene las primeras 3 propiedades disponibles (ya que el tamaño no tiene sentido para el sonido):
+
+<meta property="og:audio" content="https://example.com/sound.mp3" />
+<meta property="og:audio:secure_url" content="https://secure.example.com/sound.mp3" />
+<meta property="og:audio:type" content="audio/mpeg" />
+
+Arrays
+
+Si una etiqueta puede tener múltiples valores, sólo tienes que poner múltiples versiones de la misma <meta>Etiqueta en su página. La primera etiqueta (de arriba a abajo) se da preferencia durante los conflictos.
+
+<meta property="og:image" content="https://example.com/rock.jpg" />
+<meta property="og:image" content="https://example.com/rock2.jpg" />
+
+Pon propiedades estructuradas después de declarar su etiqueta raíz. Cuando sea otro elemento raíz es analizado, esa propiedad estructurada se considera que se hace y se inicia otro.
+
+Por ejemplo:
+
+<meta property="og:image" content="https://example.com/rock.jpg" />
+<meta property="og:image:width" content="300" />
+<meta property="og:image:height" content="300" />
+<meta property="og:image" content="https://example.com/rock2.jpg" />
+<meta property="og:image" content="https://example.com/rock3.jpg" />
+<meta property="og:image:height" content="1000" />
+
+significa que hay 3 imágenes en esta página, la primera imagen es 300x300, el medio uno tiene dimensiones no especificadas, y la última es 1000px alto.
+Tipos de objetos
+
+Para que tu objeto esté representado dentro del gráfico, es necesario especificar su tipo. Esto se hace usando la og:typepropiedad:
+
+<meta property="og:type" content="website" />
+
+Cuando la comunidad se compromete en el esquema para un tipo, se añade a la lista de tipos globales. Todos los demás objetos del sistema de tipo son CURIEs de la forma
+
+<head prefix="my_namespace: https://example.com/ns#">
+<meta property="og:type" content="my_namespace:my_type" />
+
+Los tipos globales se agrupan en verticales. Cada vertical tiene su su propio espacio de nombres. El og:typevalores para un espacio de nombres siempre están prefijo con el espacio de nombres y luego un período. Esto es para reducir la confusión con los tipos de espacio de nombres definidos por el usuario que siempre tienes colones en ellos.
+Música
+
+    Namespace URI: https://ogp.me/ns/music#
+
+og:typevalores:
+
+music.song
+
+    music:duration- entero =1 - La longitud de la canción en segundos.
+    music:album- music.album array - El álbum de la que es esta canción.
+    music:album:disc- entero .=1 - En qué disco del álbum está encendida esta canción.
+    music:album:track- entero .=1 - Qué tema es esta canción.
+    music:musician- matriz de perfil - El músico que hizo esta canción.
+
+music.album
+
+    music:song- music.song - La canción de este disco.
+    music:song:disc- entero .=1 - Lo mismo que music:album:discpero al revés.
+    music:song:track- entero .=1 - Lo mismo que music:album:trackpero al revés.
+    music:musician- perfil El músico que hizo esta canción.
+    music:release_date- la fecha - La fecha en que salió el álbum.
+
+music.playlist
+
+    music:song- Idéntico a los de
+    music:song:disc
+    music:song:track
+    music:creator- Perfil - El creador de esta lista de reproducción.
+
+music.radio_station
+
+    music:creator- El creador de esta estación.
+
+Vídeo
+
+    Namespace URI: https://ogp.me/ns/video#
+
+og:typevalores:
+
+video.movie
+
+    video:actor- matriz de perfil - Actores de la película.
+    video:actor:role- El papel que jugaron.
+    video:director- matriz de perfil - Directores de la película.
+    video:writer- matriz de perfil - Escritores de la película.
+    video:duration- entero .=1 - La película es larga en segundos.
+    video:release_date- la fecha - La fecha en que se estrenó la película.
+    video:tag- matriz de cuerdas - Etiquetas asociadas a esta película.
+
+video.episode
+
+    video:actor- Idéntico a
+    video:actor:role
+    video:director
+    video:writer
+    video:duration
+    video:release_date
+    video:tag
+    video:series- video.tv.show - A qué serie pertenece este episodio.
+
+video.tv_show
+
+Un programa de televisión multiepisodio. Los metadatos son idénticos a video.movie.
+
+video.other
+
+Un vídeo que no pertenece a ninguna otra categoría. Los metadatos son idénticos a video.movie.
+No hay vertical
+
+Estos son objetos definidos globalmente que simplemente no encaben en una vertical, sino , pero se utilizan ampliamente y se acuerdan ampliamente.
+
+og:typevalores:
+
+article- Namespace URI:
+
+    article:published_time- la fecha - Cuando el artículo fue publicado por primera vez.
+    article:modified_time- la fecha - Cuando el artículo fue cambiado por última vez.
+    article:expiration_time- la fecha - Cuando el artículo está desfasado después.
+    article:author- matriz de perfil - Escritores del artículo.
+    article:section- string - Un nombre de sección de alto nivel. Por ejemplo. Tecnología
+    article:tag- matriz de cuerdas - Etiquetas asociadas con este artículo.
+
+book- Namespace URI:
+
+    book:author- matriz de perfil - Quién escribió este libro.
+    book:isbn- la cuerda... El
+    book:release_date- hora del día - La fecha que se publicó el libro.
+    book:tag- matriz de cuerdas - Etiquetas asociadas a este libro.
+
+profile- Namespace URI:
+
+    profile:first_name- cuerda - Un nombre que normalmente se da a un individuo por un padre o auto-elegido.
+    profile:last_name- cuerda - Un nombre heredado de una familia o matrimonio y por el que el individuo es comúnmente conocido.
+    profile:username- una cuerda única corta para identificarlos.
+    profile:gender- enum (malo, mujer) - Su género.
+
+website- Namespace URI:
+
+No hay propiedades adicionales que las básicas. Cualquier página web no marcada debe ser tratada como og:typeweb.
+Tipos
+
+Los siguientes tipos se utilizan al definir atributos en el protocolo Open Graph.
+Tipo 	Descripción 	Literales
+Boolean 	Un booleano representa un valor verdadero o falso 	true, falso, 1, 0
+DateTime 	A DateTime representa un valor temporal compuesto por una fecha (año, mes, día) y un componente de tiempo opcional (horas, minutos) 	ISO 8601
+Enum 	Tipo que consiste en un conjunto limitado de valores constantes de cadena (miembros de la enumeración).	Un valor de cuerda que es miembro de la enumeración
+Flota 	Un número de punto flotante firmado de 64 bits 	Todos los literales que se ajustan a los siguientes formatos:
+
+1.234
+-1.234
+1.2e3
+-1.2e3
+7E-10
+Enteger 	Un perro firmado de 32 bits. En muchos idiomas los enteros de más de 32 bits se convierten flotan, así que limitamos el protocolo Open Graph para un uso fácil en varios idiomas. 	Todos los literales que se ajustan a los siguientes formatos:
+
+1234
+-123
+Cae 	Una secuencia de personajes de Unicode 	Todos los literales compuestos por personajes de Unicode sin personajes fugados
+URL 	Una secuencia de personajes de Unicode que identifican un recurso de Internet.	Todas las URL válidas que utilizan los protocolos https:// o https://
+Debate y apoyo
+
+Puedes discutir el Protocolo de Graph Abierta en el grupo de Facebook o en la lista de correo del desarrollador. Actualmente está siendo consumido por Facebook (ver su documentación), Google (ver su documentación), y mixi. Está siendo publicado por IMDb, Microsoft, NHL, Posterous, Rotten Tomatoes, TIEMPO, Yelp, y muchos otros.
+Implementaciones
+
+La comunidad de código abierto ha desarrollado una serie de parsers y editoriales herramientas. Hazle saber al grupo de Facebook si has construido algo impresionante también.
+
+    Depurador de objetos de Facebook - El analizador y depurador oficial de Facebook
+    Google Rich Snippets Testing Tool - Soporte de protocolo Open Graph en verticales y motores de búsqueda específicos.
+    PHP Validator y Markup Generator - OGP 2011 validador de entrada y generador de marcado en objetos PHP5
+    PHP Consumidor - una pequeña biblioteca para el acceso de datos de Protocolo de Gráfico Abrido en PHP
+    OpenGraphNode en PHP - un simple analizador para PHP
+    PyOpenGraph - una biblioteca escrita en Python para analizar el protocolo Open Graph información de los sitios web
+    OpenGraph Ruby - Ruby Gem que analiza páginas web y extrae marcado de protocolo Open Graph
+    OpenGraph para Java - pequeña clase de Java utilizada para representar el protocolo Open Graph
+    RDF::RDFa::Parser - Perl RDFa parser que entiende el protocolo Open Graph
+    Pueble de WordPress - El plugin oficial de WordPress de Facebook, que añade metadatos de Open Graph a los sitios alimentados por WordPress.
+    Alterno WordPress OGP plugin - Un simple plugin de WordPress ligero que añade metadatos de Open Graph a los sitios alimentados por WordPress.
+
+El protocolo Open Graph fue creado originalmente en Facebook y está inspirado en Dublin Core, canónico de enlace, Microformats y RDFa. La especificación descrita en esta página está disponible bajo el Acuerdo de Open Web Foundation, Versión 0.9. Este sitio web es de código abierto.

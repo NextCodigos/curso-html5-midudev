@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Arrastrar Elementos</title>
+  <style>
+    /* Estilos CSS */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+    }
+
+    header, footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    aside {
+      background-color: #f0f0f0;
+      min-width: 150px;
+    }
+
+    #draggableElements {
+      padding: 10px;
+    }
+
+    main {
+      background-color: #ddd;
+      flex-grow: 1;
+      display: flex;
+    }
+
+    .dropArea {
+      flex-grow: 1;
+      padding: 20px;
+      border: 2px dashed #333;
+    }
+
+    .dropArea h2 {
+      text-align: center;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Header</h1>
+  </header>
+  
+  <aside>
+    <div id="draggableElements">
+      <p class="draggable" draggable="true" data-type="p">Párrafo</p>
+      <img class="draggable" draggable="true" src="imagen.jpg" alt="Imagen" data-type="img">
+      <h1 class="draggable" draggable="true" data-type="h1">Título 1</h1>
+      <h2 class="draggable" draggable="true" data-type="h2">Título 2</h2>
+      <h3 class="draggable" draggable="true" data-type="h3">Título 3</h3>
+      <h4 class="draggable" draggable="true" data-type="h4">Título 4</h4>
+      <h5 class="draggable" draggable="true" data-type="h5">Título 5</h5>
+    </div>
+  </aside>
+
+  <main>
+    <div class="dropArea" id="dropAreaLeft">
+      <h2>Área Izquierda</h2>
+    </div>
+    <div class="dropArea" id="dropAreaCenter">
+      <h2>Área Central</h2>
+    </div>
+    <div class="dropArea" id="dropAreaRight">
+      <h2>Área Derecha</h2>
+    </div>
+  </main>
+
+  <footer>
+    <h6>Footer</h6>
+  </footer>
+
+  <script>
+    // Script JS
+    document.addEventListener('DOMContentLoaded', function () {
+      const draggableElements = document.querySelectorAll('.draggable');
+      const dropAreas = document.querySelectorAll('.dropArea');
+
+      draggableElements.forEach(element => {
+        element.addEventListener('dragstart', dragStart);
+      });
+
+      dropAreas.forEach(area => {
+        area.addEventListener('dragover', dragOver);
+        area.addEventListener('drop', drop);
+      });
+
+      function dragStart(event) {
+        event.dataTransfer.setData('text/plain', event.target.dataset.type);
+      }
+
+      function dragOver(event) {
+        event.preventDefault();
+      }
+
+      function drop(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain');
+        const type = data;
+
+        let element;
+        if (type === 'p') {
+          element = document.createElement('p');
+          element.textContent = 'Párrafo';
+        } else if (type === 'img') {
+          element = document.createElement('img');
+          element.src = 'imagen.jpg';
+          element.alt = 'Imagen';
+        } else if (type === 'h1' || type === 'h2' || type === 'h3' || type === 'h4' || type === 'h5') {
+          element = document.createElement(type);
+          element.textContent = `Título ${type.slice(-1)}`;
+        }
+
+        element.classList.add('draggable');
+        element.setAttribute('draggable', 'true');
+
+        element.addEventListener('dragstart', dragStart);
+
+        event.target.appendChild(element);
+      }
+    });
+  </script>
+</body>
+</html>

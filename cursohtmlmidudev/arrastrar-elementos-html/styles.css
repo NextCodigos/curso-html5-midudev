@@ -1,0 +1,46 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+}
+
+header,
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+
+aside,
+main {
+    display: flex;
+}
+
+aside {
+    background-color: #f0f0f0;
+    min-width: 150px;
+}
+
+#draggableElements {
+    padding: 10px;
+}
+
+main {
+    background-color: #ddd;
+    flex-grow: 1;
+    display: flex;
+}
+
+.dropArea {
+    flex-grow: 1;
+    padding: 20px;
+    border: 2px dashed #333;
+}
+
+.dropArea h2 {
+    text-align: center;
+    margin: 0;
+}

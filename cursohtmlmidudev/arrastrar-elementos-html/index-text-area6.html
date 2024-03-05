@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Arrastrar Elementos</title>
+  <style>
+    /* Estilos CSS */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+    }
+
+    header, footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    aside {
+      background-color: #f0f0f0;
+      min-width: 150px;
+    }
+
+    #draggableElements {
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+
+    main {
+      background-color: #ddd;
+      flex-grow: 1;
+      display: flex;
+    }
+
+    .dropArea {
+      flex-grow: 1;
+      padding: 20px;
+      border: 2px dashed #333;
+    }
+
+    .dropArea h2 {
+      text-align: center;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <div id="draggableElements">
+      <p class="draggable" draggable="true" data-type="p">Párrafo</p>
+      <img class="draggable" draggable="true" src="../images/cascada.jpg" alt="Imagen" data-type="img">
+      <h1 class="draggable" draggable="true" data-type="h1">Título 1</h1>
+      <h2 class="draggable" draggable="true" data-type="h2">Título 2</h2>
+      <h3 class="draggable" draggable="true" data-type="h3">Título 3</h3>
+      <h4 class="draggable" draggable="true" data-type="h4">Título 4</h4>
+      <h5 class="draggable" draggable="true" data-type="h5">Título 5</h5>
+      <section class="draggable dropArea" draggable="true">
+        <h2>Área de Sección</h2>
+      </section>
+      <article class="draggable dropArea" draggable="true">
+        <h2>Área de Artículo</h2>
+      </article>
+    </div>
+  </aside>
+
+  <header class="dropArea" id="dropAreaHeader">
+    <h1>Header</h1>
+  </header>
+
+  <main>
+    <div class="dropArea" id="dropAreaLeft">
+      <h2>Área Izquierda</h2>
+    </div>
+    <div class="dropArea" id="dropAreaCenter">
+      <h2>Área Central</h2>
+      <details class="draggable dropArea" draggable="true">
+        <summary>Detalles</summary>
+        <figure>
+          <img src="../images/cascada.jpg" alt="The Pulpit Rock" width="499" height="340">
+          <figcaption>
+            <mark>Fig.1</mark> - Falla de la plaza del Ayuntamiento de Valencia.
+            <time datetime="2023-11-30">30 de Noviembre de 2023</time>
+          </figcaption>
+        </figure>
+      </details>
+    </div>
+    <div class="dropArea" id="dropAreaRight">
+      <h2>Área Derecha</h2>
+    </div>
+  </main>
+
+  <footer class="dropArea" id="dropAreaFooter">
+    <h6>Footer</h6>
+  </footer>
+
+  <script>
+    // Script JS para habilitar arrastrar y soltar
+    document.addEventListener('DOMContentLoaded', function () {
+      const draggableElements = document.querySelectorAll('.draggable');
+      const dropAreas = document.querySelectorAll('.dropArea');
+
+      draggableElements.forEach(element => {
+        element.addEventListener('dragstart', dragStart);
+      });
+
+      dropAreas.forEach(area => {
+        area.addEventListener('dragover', dragOver);
+        area.addEventListener('drop', drop);
+      });
+
+      function dragStart(event) {
+        event.dataTransfer.setData('text/plain', event.target.outerHTML);
+      }
+
+      function dragOver(event) {
+        event.preventDefault();
+      }
+
+      function drop(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain');
+        const newElement = document.createElement('div');
+        newElement.innerHTML = data;
+        const element = newElement.firstChild;
+
+        if (element.classList.contains('draggable')) {
+          event.target.appendChild(element);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
